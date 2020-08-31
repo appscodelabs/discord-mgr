@@ -1,5 +1,16 @@
 # discord-mgr
 
+## Usage
+
+```console
+discord-mgr add-company --guild=appscode --role=client_company
+discord-mgr add-role --guild=appscode --role=client_company --username=client_user
+discord-mgr remove-role --guild=appscode --role=client_company --username=client_user
+```
+
+
+## API Clients
+
 - https://discordapi.com/unofficial/comparison.html
 
 ## Permissions
