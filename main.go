@@ -21,15 +21,19 @@ import (
 
 	"github.com/appscodelabs/discord-mgr/cmds"
 
-	logs "github.com/appscode/go/log/golog"
+	"gomodules.xyz/logs"
 )
 
 func main() {
-	logs.InitLogs()
-	defer logs.FlushLogs()
-
-	if err := cmds.NewRootCmd().Execute(); err != nil {
+	if err := realMain(); err != nil {
 		os.Exit(1)
 	}
 	os.Exit(0)
+}
+
+func realMain() error {
+	logs.InitLogs()
+	defer logs.FlushLogs()
+
+	return cmds.NewRootCmd().Execute()
 }
