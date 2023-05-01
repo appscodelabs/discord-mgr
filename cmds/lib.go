@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"gomodules.xyz/pointer"
 )
 
 /*
@@ -222,11 +223,19 @@ func AddCompany(dg *discordgo.Session, guildName, parentChannel, channelName str
 		return err
 	}
 
-	role, err := dg.GuildRoleCreate(guild.ID)
+	role, err := dg.GuildRoleCreate(guild.ID, &discordgo.RoleParams{
+		Name: channelName,
+	})
 	if err != nil {
 		return err
 	}
-	role, err = dg.GuildRoleEdit(guild.ID, role.ID, channelName, 0x9b59b6, true, 0, false)
+	role, err = dg.GuildRoleEdit(guild.ID, role.ID, &discordgo.RoleParams{
+		Name:        channelName,
+		Color:       pointer.IntP(0x9b59b6),
+		Hoist:       pointer.TrueP(),
+		Permissions: pointer.Int64P(0),
+		Mentionable: pointer.FalseP(),
+	})
 	if err != nil {
 		return err
 	}
@@ -240,7 +249,7 @@ func AddCompany(dg *discordgo.Session, guildName, parentChannel, channelName str
 		discordgo.PermissionAddReactions |
 		discordgo.PermissionUseExternalEmojis
 
-	err = dg.ChannelPermissionSet(ch.ID, role.ID, string(discordgo.AuditLogOptionsTypeRole), perm, 0)
+	err = dg.ChannelPermissionSet(ch.ID, role.ID, discordgo.PermissionOverwriteTypeRole, int64(perm), 0)
 	if err != nil {
 		return err
 	}
